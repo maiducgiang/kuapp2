@@ -1,6 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kuofficallvn/cubit/main_cubit.dart';
+import 'package:kuofficallvn/cubit/main_state.dart';
+import 'package:kuofficallvn/screen/screen1.dart';
+import 'package:kuofficallvn/screen/screen2.dart';
+import 'package:kuofficallvn/screen/screen3.dart';
+import 'package:kuofficallvn/screen/screen4.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -13,15 +25,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -50,66 +53,153 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  int _selectedIndex = 0;
+  @override
+  void initState() {
+    init();
+    // TODO: implement initState
+    super.initState();
   }
+
+  List<Widget> _widgetOptions = <Widget>[
+    Home(link: ""),
+    Login(link: ""),
+    Logout(link: ""),
+    Help(link: ""),
+  ];
+  List<IconData> _icon = [Icons.home, Icons.login, Icons.logout, Icons.help];
+  void init() async {}
+
+  void _onItemTapped(int index) async {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    Navigator.pop(context);
+  }
+
+  final List<String> _title = ['Trang chủ', 'Đăng nhập', 'Đăng ký', 'Hỗ trợ'];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+    return BlocProvider(
+      create: (context) => MainCubit()..init(),
+      child: BlocConsumer<MainCubit, MainState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          if (state.web1 == null || state.web1 == "") {
+            return LoadingOverlay(child: Container(), isLoading: true);
+          } else {
+            _widgetOptions = <Widget>[
+              Home(link: state.web1!),
+              Login(link: state.web2!),
+              Logout(link: state.web3!),
+              Help(link: state.web4!),
+            ];
+          }
+          return Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.amber,
+                // backgroundColor: backgroundColor,
+                iconTheme: IconThemeData(color: Colors.black),
+                title: Text(
+                  _title[_selectedIndex],
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
+                ),
+                centerTitle: false,
+                elevation: 0,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20))),
+              ),
+              // backgroundColor: backgroundColor,
+              drawer: Drawer(
+                backgroundColor: Colors.white,
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 112,
+                      child: DrawerHeader(
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(20))),
+                          child: Row(
+                            children: [
+                              // GestureDetector(
+                              //   onTap: () {},
+                              //   child: const CircleAvatar(
+                              //     backgroundColor: Colors.white,
+                              //     child: Icon(Icons.person, color: Colors.grey),
+                              //   ),
+                              // ),
+                              // SizedBox(width: 16),
+                              // const Flexible(
+                              //   child: Text(
+                              //     'Xin chào',
+                              //     maxLines: 1,
+                              //     overflow: TextOverflow.ellipsis,
+                              //     style: TextStyle(
+                              //         fontWeight: FontWeight.w500,
+                              //         fontSize: 16,
+                              //         color: Colors.black),
+                              //   ),
+                              // )
+                            ],
+                          )),
+                    ),
+                    Column(
+                      children: List.generate(4, (index) {
+                        return ListTile(
+                          leading: Icon(
+                            _icon[index],
+                            size: 23,
+                          ),
+                          // Image.asset(
+                          //   _icon[index],
+                          //   height: 24,
+                          //   width: 24,
+                          // ),
+                          title: Text(
+                            _title[index],
+                            // style: index != _selectedIndex
+                            //     ? titleStyle.copyWith(
+                            //         height: 0,
+                            //         fontSize: 14.sp,
+                            //         color: textColor)
+                            //     : titleStyle.copyWith(
+                            //         height: 0,
+                            //         fontSize: 14.sp,
+                            //         color: primaryColor),
+                          ),
+                          selected: _selectedIndex == index,
+                          onTap: () async {
+                            // if (index == 3) {
+                            //   ///TODO: implement logout
+                            //   await _cacheManager.deleteUserToCached();
+                            //   _cacheManager.addStatusClickToCached(null);
+                            //   context.router.push(const SplashPage());
+                            // } else {
+                            _onItemTapped(index);
+                            // }
+                          },
+                        );
+                      }),
+                    )
+                  ],
+                ),
+              ),
+              body: _widgetOptions.elementAt(_selectedIndex));
+        },
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
