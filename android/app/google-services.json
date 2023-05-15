@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "754376075285",
+    "project_id": "kuapp2-d9df5",
+    "storage_bucket": "kuapp2-d9df5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754376075285:android:53f53685b9dd5bddab061c",
+        "android_client_info": {
+          "package_name": "com.example.kuofficallvn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754376075285-beu1p2o7glaoqobeal9ij4d2c94b8geg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdpXO3aPIszi1EmLVKiqlhJLEvebjvYDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754376075285-beu1p2o7glaoqobeal9ij4d2c94b8geg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754376075285-47rovksnfdeq4snfuhq50qt8itpl39jc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kuofficallvn"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
