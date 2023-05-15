@@ -67,7 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Logout(link: ""),
     Help(link: ""),
   ];
-  List<IconData> _icon = [Icons.home, Icons.login, Icons.logout, Icons.help];
+  List<IconData> _icon = [
+    Icons.home_outlined,
+    Icons.login_sharp,
+    Icons.output_rounded,
+    Icons.help_center_outlined
+  ];
   void init() async {}
 
   void _onItemTapped(int index) async {
@@ -102,9 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
           return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
-                backgroundColor: Colors.amber,
+                backgroundColor: Colors.red[200],
                 // backgroundColor: backgroundColor,
-                iconTheme: IconThemeData(color: Colors.black),
+                iconTheme: IconThemeData(color: Colors.white),
                 title: Text(
                   _title[_selectedIndex],
                   style: TextStyle(
@@ -129,31 +134,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 112,
                       child: DrawerHeader(
                           decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.only(
+                              color: Colors.red[200],
+                              borderRadius: const BorderRadius.only(
                                   bottomRight: Radius.circular(20))),
                           child: Row(
-                            children: [
-                              // GestureDetector(
-                              //   onTap: () {},
-                              //   child: const CircleAvatar(
-                              //     backgroundColor: Colors.white,
-                              //     child: Icon(Icons.person, color: Colors.grey),
-                              //   ),
-                              // ),
-                              // SizedBox(width: 16),
-                              // const Flexible(
-                              //   child: Text(
-                              //     'Xin chào',
-                              //     maxLines: 1,
-                              //     overflow: TextOverflow.ellipsis,
-                              //     style: TextStyle(
-                              //         fontWeight: FontWeight.w500,
-                              //         fontSize: 16,
-                              //         color: Colors.black),
-                              //   ),
-                              // )
-                            ],
+                            children: [],
                           )),
                     ),
                     Column(
@@ -161,6 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         return ListTile(
                           leading: Icon(
                             _icon[index],
+                            color: index == _selectedIndex
+                                ? Colors.red
+                                : Colors.grey,
                             size: 23,
                           ),
                           // Image.asset(
@@ -170,15 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           // ),
                           title: Text(
                             _title[index],
-                            // style: index != _selectedIndex
-                            //     ? titleStyle.copyWith(
-                            //         height: 0,
-                            //         fontSize: 14.sp,
-                            //         color: textColor)
-                            //     : titleStyle.copyWith(
-                            //         height: 0,
-                            //         fontSize: 14.sp,
-                            //         color: primaryColor),
+                            // style: TextStyle(color: Colors.white),
+                            style: index != _selectedIndex
+                                ? TextStyle(
+                                    height: 0, fontSize: 14, color: Colors.grey)
+                                : TextStyle(
+                                    height: 0, fontSize: 14, color: Colors.red),
                           ),
                           selected: _selectedIndex == index,
                           onTap: () async {
